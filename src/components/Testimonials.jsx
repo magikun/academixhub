@@ -28,9 +28,8 @@ function TestimonialRow({ testimonials, direction = 'left', borderStyle }) {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
   
-  // Mobile: 20 cycles (smaller screen, less memory)
-  // Desktop: 50 cycles
-  const cycles = isMobile ? 20 : 50
+  // Reduce cycles on mobile to keep DOM light and avoid mobile reloads
+  const cycles = isMobile ? 10 : 20
   
   // Safety check for testimonials array
   if (!testimonials || !Array.isArray(testimonials) || testimonials.length === 0) {
@@ -82,7 +81,7 @@ export default function Testimonials() {
   return (
     <div className="py-8 relative">
       {/* Background graphics */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none hidden md:block">
         {/* Gradient orbs */}
         <div className="absolute top-20 left-10 w-72 h-72 bg-blue/10 rounded-full blur-3xl" />
         <div className="absolute bottom-20 right-10 w-72 h-72 bg-green/10 rounded-full blur-3xl" />
