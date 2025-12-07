@@ -1,0 +1,8 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <!-- White background circle -->
+  <circle cx="32" cy="32" r="32" fill="white"/>
+  
+  <!-- Embedded logo image -->
+  <image href="/src/components/academix-logo.png" x="8" y="8" width="48" height="48" preserveAspectRatio="xMidYMid meet"/>
+</svg>
+

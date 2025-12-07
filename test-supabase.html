@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Supabase Connection</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 600px; 
+            margin: 50px auto; 
+            padding: 20px;
+        }
+        input { 
+            padding: 10px; 
+            width: 300px; 
+            font-size: 16px;
+        }
+        button { 
+            padding: 10px 20px; 
+            font-size: 16px; 
+            cursor: pointer;
+            background: #3E8E3A;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        #result { 
+            margin-top: 20px; 
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Supabase Connection</h1>
+    
+    <div>
+        <h3>Step 1: Add Your Credentials</h3>
+        <p>Supabase URL:</p>
+        <input type="text" id="url" placeholder="https://xxxxx.supabase.co">
+        
+        <p>Supabase Anon Key:</p>
+        <input type="text" id="key" placeholder="eyJhbGci...">
+    </div>
+    
+    <div style="margin-top: 20px;">
+        <h3>Step 2: Test Email</h3>
+        <input type="email" id="email" placeholder="test@example.com" value="test@example.com">
+        <button onclick="testInsert()">Send to Database</button>
+    </div>
+    
+    <div id="result"></div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+        
+        window.testInsert = async function() {
+            const resultDiv = document.getElementById('result');
+            const url = document.getElementById('url').value;
+            const key = document.getElementById('key').value;
+            const email = document.getElementById('email').value;
+            
+            resultDiv.innerHTML = '<div class="info">⏳ Testing connection...</div>';
+            
+            try {
+                // Create client
+                const supabase = createClient(url, key);
+                
+                // Try to insert
+                const { data, error } = await supabase
+                    .from('waitlist')
+                    .insert([{ email: email }])
+                    .select();
+                
+                if (error) {
+                    throw error;
+                }
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <h3>✅ SUCCESS!</h3>
+                        <p>Email saved: ${email}</p>
+                        <p>Now check your Supabase Table Editor!</p>
+                    </div>
+                `;
+                
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ ERROR</h3>
+                        <p><strong>Message:</strong> ${error.message}</p>
+                        <p><strong>Details:</strong> ${error.details || 'None'}</p>
+                        <p><strong>Hint:</strong> ${error.hint || 'Check your credentials and table'}</p>
+                    </div>
+                `;
+                console.error('Full error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
+
