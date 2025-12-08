@@ -36,8 +36,10 @@ export default function TrustedBy() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
   
-  // Optimized: Mobile 50 cycles, Desktop 100 cycles
-  const cycles = isMobile ? 50 : 100
+  const marqueeDuration = isMobile ? '5s' : '11s'
+  // Ensure enough logos to cover viewport width and avoid gaps
+  const repeatCount = Math.max(5, Math.ceil(12 / Math.max(1, logos.length)))
+  const trackLogos = Array.from({ length: repeatCount }).flatMap(() => logos)
   
   return (
     <FadeInSection>
@@ -49,20 +51,36 @@ export default function TrustedBy() {
           <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-offwhite to-transparent" />
           <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-offwhite to-transparent" />
 
-          {/* Infinite seamless marquee - multiply logos for smooth looping */}
-          <div className="flex gap-10 w-max animate-marquee">
-            {Array(cycles).fill([...logos]).flat().map((l, idx) => (
-              <div key={`logo-${l.id}-${idx}`} className="flex items-center justify-center flex-shrink-0">
-                <img
-                  src={l.src}
-                  alt={l.alt}
-                  className="h-32 md:h-40 w-auto object-contain opacity-95 hover:opacity-100 transition-transform duration-200 ease-out transform hover:-translate-y-1 mix-blend-multiply"
-                />
-              </div>
-            ))}
+          {/* Seamless dual-track marquee */}
+          <div
+            className="marquee marquee--dual"
+            style={{ '--marquee-duration': marqueeDuration, '--marquee-gap': '1.25rem' }}
+          >
+            <div className="marquee__inner">
+              {trackLogos.map((l, idx) => (
+                <div key={`logo-${l.id}-${idx}`} className="flex items-center justify-center flex-shrink-0">
+                  <img
+                    src={l.src}
+                    alt={l.alt}
+                    className="h-32 md:h-40 w-auto object-contain opacity-95 hover:opacity-100 transition-transform duration-200 ease-out transform hover:-translate-y-1 mix-blend-multiply"
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="marquee__inner second" aria-hidden="true">
+              {trackLogos.map((l, idx) => (
+                <div key={`logo-${l.id}-dup-${idx}`} className="flex items-center justify-center flex-shrink-0">
+                  <img
+                    src={l.src}
+                    alt=""
+                    aria-hidden="true"
+                    className="h-32 md:h-40 w-auto object-contain opacity-95 mix-blend-multiply"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
-          {/* Mark the duplicate track as decorative for screen readers */}
-          <div className="sr-only" aria-hidden="true">Partner logos carousel</div>
+          <div className="sr-only" aria-hidden="true">Partner logos carousel (continuous)</div>
         </div>
       </div>
     </FadeInSection>
