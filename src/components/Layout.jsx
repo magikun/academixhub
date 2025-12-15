@@ -11,10 +11,31 @@ export default function Layout() {
   const { language } = useLanguage()
   const [isLoaded, setIsLoaded] = useState(false)
 
-  // Instantly scroll to top when route changes - no animations
+  // Handle scrolling when route changes
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [location.pathname])
+    // If we're on the home page, check for hash and scroll to it
+    if (location.pathname === '' || location.pathname === '/') {
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        const hash = window.location.hash
+        if (hash === '#apply') {
+          const element = document.getElementById('apply')
+          if (element) {
+            const offset = 100 // Offset for fixed header
+            const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+            const offsetPosition = elementPosition - offset
+            window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
+            return
+          }
+        }
+        // Otherwise scroll to top
+        window.scrollTo(0, 0)
+      }, 100)
+    } else {
+      // For other pages, scroll to top
+      window.scrollTo(0, 0)
+    }
+  }, [location.pathname, location.hash])
 
   // Add language class to body element for font switching
   useEffect(() => {

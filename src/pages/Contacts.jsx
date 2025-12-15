@@ -1,7 +1,8 @@
-import { Mail, MapPin, Send, Instagram } from 'lucide-react'
+import { Mail, MapPin, Send, Instagram, ArrowRight } from 'lucide-react'
 import FadeInSection from '../components/FadeInSection'
 import { useLanguage } from '../contexts/LanguageContext'
 import { getTranslation } from '../translations'
+import { HighlightGroup, HighlighterItem, Particles } from '../components/ui/highlighter'
 
 export default function Contacts() {
   const { language } = useLanguage()
@@ -22,21 +23,21 @@ export default function Contacts() {
         </div>
       </section>
 
-      {/* Beautiful Gradient Section */}
+      {/* Highlighter Section */}
       <section className="pb-8">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <FadeInSection>
-              <div className="relative rounded-2xl overflow-hidden">
-                {/* Gradient Background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-600 via-teal-700 to-cyan-800 opacity-95" />
-                
-                {/* Decorative Elements */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-yellow/20 rounded-full blur-3xl" />
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-green/20 rounded-full blur-3xl" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue/10 rounded-full blur-3xl" />
-                
-                {/* Content */}
+              <HighlightGroup className="group h-full">
+                <div className="group/item h-full">
+                  <HighlighterItem className="rounded-3xl before:bg-white/30">
+                    <div className="relative z-20 h-full overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-600 via-teal-700 to-cyan-800">
+                      <Particles
+                        className="absolute inset-0 -z-10 opacity-10 transition-opacity duration-1000 ease-in-out group-hover/item:opacity-100"
+                        quantity={200}
+                        color={"#ffffff"}
+                        vy={-0.2}
+                      />
                 <div className="relative z-10 px-8 py-12 md:px-12 md:py-16 text-center">
                   <p className="text-xl md:text-2xl text-white font-medium leading-relaxed mb-8">
                     {t.contacts.subtitle}
@@ -49,21 +50,17 @@ export default function Contacts() {
                     rel="noopener noreferrer"
                     className="group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white text-navy font-bold text-base md:text-lg hover:bg-offwhite hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl"
                   >
-                    <span>{t.contacts.bookBtn}</span>
-                    <svg 
+                          <span>{t.contacts.bookBtn} a call</span>
+                          <ArrowRight 
                       className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </a>
+                            size={20}
+                          />
+                        </a>
+                      </div>
+                    </div>
+                  </HighlighterItem>
                 </div>
-                
-                {/* Bottom shine effect */}
-                <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-              </div>
+              </HighlightGroup>
             </FadeInSection>
           </div>
         </div>

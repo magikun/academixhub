@@ -9,11 +9,17 @@ import Audience from '../components/Audience'
 import Community from '../components/Community'
 import Testimonials from '../components/Testimonials'
 import TrustedBy from '../components/TrustedBy'
+import { TextLoop } from '../components/ui/text-loop'
+import { useLanguage } from '../contexts/LanguageContext'
+import { getTranslation } from '../translations'
 import businessman from '../images/businessman.png'
 import feedback from '../images/feedback.png'
 import fivestarsphone from '../images/fivestarsphone.png'
 
 export default function Home() {
+  const { language } = useLanguage()
+  const t = getTranslation(language)
+  
   return (
     <>
       <section className="pt-4">
@@ -28,6 +34,29 @@ export default function Home() {
         <div className="container mx-auto">
           <About />
         </div>
+      </section>
+
+      <section className="section py-8 md:py-12">
+        <FadeInSection>
+          <div className="container mx-auto">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy via-navy to-blue p-6 md:p-8 lg:p-10">
+              <div className="text-center">
+                <TextLoop interval={2.5}>
+                  {[
+                    t.textLoop.option1,
+                    t.textLoop.option2,
+                    t.textLoop.option3,
+                    t.textLoop.option4,
+                  ].map((text) => (
+                    <span key={text} className="block text-2xl md:text-3xl lg:text-4xl font-bold text-white" style={{ fontFamily: 'inherit' }}>
+                      {text}
+                    </span>
+                  ))}
+                </TextLoop>
+              </div>
+            </div>
+          </div>
+        </FadeInSection>
       </section>
 
       <section className="section">

@@ -1,12 +1,42 @@
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { ArrowRight, FlaskConical, Users, Trophy } from 'lucide-react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { getTranslation } from '../translations'
+import { SpotlightCard } from './ui/spotlight-card'
 
 export default function Hero() {
   const { language } = useLanguage()
   const t = getTranslation(language)
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const scrollToWaitlist = (e) => {
+    e.preventDefault()
+    const isHomePage = location.pathname === '/' || location.pathname === ''
+    
+    if (!isHomePage) {
+      navigate('/')
+      // Wait for navigation and DOM to be ready, then scroll
+      setTimeout(() => {
+        const element = document.getElementById('apply')
+        if (element) {
+          const offset = 100 // Offset for fixed header
+          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+          const offsetPosition = elementPosition - offset
+          window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
+        }
+      }, 150)
+    } else {
+      const element = document.getElementById('apply')
+      if (element) {
+        const offset = 100 // Offset for fixed header
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+        const offsetPosition = elementPosition - offset
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
+      }
+    }
+  }
 
   const container = {
     hidden: { opacity: 0 },
@@ -47,23 +77,44 @@ export default function Hero() {
 
             <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto text-navy/90">
               {[
-                { text: t.hero.feature1, icon: FlaskConical, color: 'text-blue', chip: 'bg-blue/15' },
-                { text: t.hero.feature2, icon: Users, color: 'text-green', chip: 'bg-green/15' },
-                { text: t.hero.feature3, icon: Trophy, color: 'text-yellow', chip: 'bg-yellow/15' }
-              ].map(({ text, icon: Icon, color, chip }) => (
-                <div key={text} className="group p-[1px] rounded-xl bg-gradient-to-br from-blue/20 via-yellow/20 to-green/20 hover:shadow-lg transition-shadow">
+                { text: t.hero.feature1, icon: FlaskConical, color: 'text-blue', chip: 'bg-blue/15', spotlight: "rgba(47, 111, 191, 0.25)", useSpotlight: true },
+                { text: t.hero.feature2, icon: Users, color: 'text-green', chip: 'bg-green/15', spotlight: "rgba(62, 142, 58, 0.25)", useSpotlight: false },
+                { text: t.hero.feature3, icon: Trophy, color: 'text-yellow', chip: 'bg-yellow/15', spotlight: "rgba(244, 197, 66, 0.25)", useSpotlight: false }
+              ].map(({ text, icon: Icon, color, chip, spotlight, useSpotlight }) => {
+                const CardContent = (
                   <div className="h-full rounded-xl bg-white/70 backdrop-blur border border-navy/10 px-5 py-4 flex items-center gap-3 hover:-translate-y-0.5 transition-transform">
                     <span className={`h-9 w-9 rounded-lg ${chip} flex items-center justify-center shrink-0`}>
                       <Icon className={`${color}`} size={18} />
                     </span>
                     <span className="text-base md:text-[17px]">{text}</span>
                   </div>
-                </div>
-              ))}
+                )
+
+                if (useSpotlight) {
+                  return (
+                    <SpotlightCard 
+                      key={text} 
+                      className="group p-[1px] rounded-xl bg-gradient-to-br from-blue/20 via-yellow/20 to-green/20 hover:shadow-lg transition-shadow border-0"
+                      spotlightColor={spotlight}
+                    >
+                      {CardContent}
+                    </SpotlightCard>
+                  )
+                } else {
+                  return (
+                    <div 
+                      key={text} 
+                      className="group p-[1px] rounded-xl bg-gradient-to-br from-blue/20 via-yellow/20 to-green/20 hover:shadow-lg transition-shadow border-0"
+                    >
+                      {CardContent}
+                    </div>
+                  )
+                }
+              })}
             </motion.div>
 
             <motion.div variants={item} className="flex flex-col sm:flex-row gap-3 pt-2 justify-center">
-              <a href="#apply" className="btn btn-primary hover:scale-105 hover-shine">
+              <a href="#apply" onClick={scrollToWaitlist} className="btn btn-primary hover:scale-105 hover-shine">
                 {t.hero.applyBtn}
                 <ArrowRight size={18} />
               </a>

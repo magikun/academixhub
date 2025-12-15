@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { ArrowRight, X } from 'lucide-react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { getTranslation } from '../translations'
@@ -6,8 +7,31 @@ import { getTranslation } from '../translations'
 export default function StickySubheader() {
   const { language } = useLanguage()
   const t = getTranslation(language)
+  const navigate = useNavigate()
+  const location = useLocation()
   const [visible, setVisible] = useState(false)
   const [closed, setClosed] = useState(false)
+
+  const scrollToWaitlist = (e) => {
+    e.preventDefault()
+    const isHomePage = location.pathname === '/' || location.pathname === ''
+    
+    if (!isHomePage) {
+      navigate('/')
+      // Wait for navigation to complete, then scroll
+      setTimeout(() => {
+        const element = document.getElementById('apply')
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 100)
+    } else {
+      const element = document.getElementById('apply')
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }
+  }
 
   useEffect(() => {
     try {
@@ -32,7 +56,7 @@ export default function StickySubheader() {
       <div className="container mx-auto">
         <div className="glass glow rounded-full px-4 py-2 flex items-center gap-3">
           <span className="text-sm text-navy/80 flex-1">{t.stickyBanner.text}</span>
-          <a href="#apply" className="btn btn-primary hover:scale-105 hover-shine"> 
+          <a href="#apply" onClick={scrollToWaitlist} className="btn btn-primary hover:scale-105 hover-shine"> 
             {t.stickyBanner.btn}
             <ArrowRight size={16} />
           </a>

@@ -57,27 +57,35 @@ export default function TrustedBy() {
             style={{ '--marquee-duration': marqueeDuration, '--marquee-gap': '1.25rem' }}
           >
             <div className="marquee__inner">
-              {trackLogos.map((l, idx) => (
-                <div key={`logo-${l.id}-${idx}`} className="flex items-center justify-center flex-shrink-0">
-                  <img
-                    src={l.src}
-                    alt={l.alt}
-                    className="h-32 md:h-40 w-auto object-contain opacity-95 hover:opacity-100 transition-transform duration-200 ease-out transform hover:-translate-y-1 mix-blend-multiply"
-                  />
-                </div>
-              ))}
+              {trackLogos.map((l, idx) => {
+                const isInvestly = l.src.includes('investly')
+                const heightClass = isInvestly ? 'h-16 md:h-20' : 'h-32 md:h-40'
+                return (
+                  <div key={`logo-${l.id}-${idx}`} className="flex items-center justify-center flex-shrink-0">
+                    <img
+                      src={l.src}
+                      alt={l.alt}
+                      className={`${heightClass} w-auto object-contain opacity-95 hover:opacity-100 transition-transform duration-200 ease-out transform hover:-translate-y-1 mix-blend-multiply`}
+                    />
+                  </div>
+                )
+              })}
             </div>
             <div className="marquee__inner second" aria-hidden="true">
-              {trackLogos.map((l, idx) => (
-                <div key={`logo-${l.id}-dup-${idx}`} className="flex items-center justify-center flex-shrink-0">
-                  <img
-                    src={l.src}
-                    alt=""
-                    aria-hidden="true"
-                    className="h-32 md:h-40 w-auto object-contain opacity-95 mix-blend-multiply"
-                  />
-                </div>
-              ))}
+              {trackLogos.map((l, idx) => {
+                const isInvestly = l.src.includes('investly')
+                const heightClass = isInvestly ? 'h-16 md:h-20' : 'h-32 md:h-40'
+                return (
+                  <div key={`logo-${l.id}-dup-${idx}`} className="flex items-center justify-center flex-shrink-0">
+                    <img
+                      src={l.src}
+                      alt=""
+                      aria-hidden="true"
+                      className={`${heightClass} w-auto object-contain opacity-95 mix-blend-multiply`}
+                    />
+                  </div>
+                )
+              })}
             </div>
           </div>
           <div className="sr-only" aria-hidden="true">Partner logos carousel (continuous)</div>

@@ -1,8 +1,11 @@
 import { createClient } from "@supabase/supabase-js";
 
-// Get these from: Supabase Dashboard → Settings → API
-const SUPABASE_URL = "https://yvvuxclqgrwvatxopajl.supabase.co";
+// Prefer env vars; fallback to the provided values for local dev
+const SUPABASE_URL =
+  import.meta.env.VITE_SUPABASE_URL ||
+  "https://yvvuxclqgrwvatxopajl.supabase.co";
 const SUPABASE_ANON_KEY =
+  import.meta.env.VITE_SUPABASE_ANON_KEY ||
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2dnV4Y2xxZ3J3dmF0eG9wYWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4NTM4ODYsImV4cCI6MjA4MDQyOTg4Nn0.spgPMcyoV5SDHRRv1CK6CvQjTtb9672spxpMhkkcG1w";
 
 // Create Supabase client
@@ -12,19 +15,8 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
  * Save email to PostgreSQL database (via Supabase)
  */
 export const saveEmailToDatabase = async (email) => {
-  // Debug: Log configuration status
-  console.log("🔍 Checking Supabase configuration...");
-  console.log("URL configured:", SUPABASE_URL !== "YOUR_SUPABASE_URL");
-  console.log(
-    "Key configured:",
-    SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY"
-  );
-
   // Check if configured
-  if (
-    SUPABASE_URL === "YOUR_SUPABASE_URL" ||
-    SUPABASE_ANON_KEY === "YOUR_SUPABASE_ANON_KEY"
-  ) {
+  if (!isDatabaseConfigured()) {
     console.warn("⚠️ Supabase not configured. Email not saved to database.");
     console.log("📧 Would have saved:", email);
     return { success: true, demo: true };
@@ -61,8 +53,9 @@ export const saveEmailToDatabase = async (email) => {
  */
 export const isDatabaseConfigured = () => {
   return (
-    SUPABASE_URL !== "YOUR_SUPABASE_URL" &&
-    SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY"
+    Boolean(SUPABASE_URL && SUPABASE_ANON_KEY) &&
+    !SUPABASE_URL.includes("YOUR_SUPABASE_URL") &&
+    !SUPABASE_ANON_KEY.includes("YOUR_SUPABASE_ANON_KEY")
   );
 };
 
@@ -100,3 +93,4 @@ export const getEmailCount = async () => {
     return { success: false, error: error.message };
   }
 };
+

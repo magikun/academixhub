@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Brain, FlaskConical, TrendingUp } from 'lucide-react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { getTranslation } from '../translations'
+import { SpotlightCard } from './ui/spotlight-card'
 import research from '../images/research.png'
 import competition from '../images/competition.png'
 import startuprocket from '../images/startuprocket.png'
@@ -82,26 +83,40 @@ export default function Features() {
         {t.features.title}
       </h2>
       <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
-        {features.map(({ title, desc, icon: Icon, color, bg, image }, idx) => (
-          <motion.div key={title} variants={item} className="relative p-[1px] rounded-xl bg-gradient-to-br from-blue/20 via-yellow/20 to-green/20 card-hover group h-full hover-shine overflow-hidden">
-            <div className="rounded-xl bg-white p-6 h-full flex flex-col relative">
-              {idx === 0 && <Decorative variant="yellow" />}
-              {idx === 1 && <Decorative variant="blue" />}
-              {idx === 2 && <Decorative variant="green" />}
-              
-              {/* Feature Image */}
-              <div className="mb-4 w-full h-40 flex items-center justify-center">
-                <img src={image} alt={title} className="w-32 h-32 object-contain opacity-90" />
-              </div>
-              
-              <div className={`h-11 w-11 rounded-lg ${bg} flex items-center justify-center mb-4`}>
-                <Icon className={`${color} transition-transform duration-150 group-hover:rotate-3`} />
-              </div>
-              <h3 className="text-lg font-semibold text-navy mb-1">{title}</h3>
-              <p className="text-navy/75 flex-1">{desc}</p>
-            </div>
-          </motion.div>
-        ))}
+        {features.map(({ title, desc, icon: Icon, color, bg, image }, idx) => {
+          // Spotlight colors matching the theme
+          const spotlightColors = [
+            "rgba(244, 197, 66, 0.25)", // yellow
+            "rgba(47, 111, 191, 0.25)", // blue
+            "rgba(62, 142, 58, 0.25)"  // green
+          ]
+          
+          return (
+            <motion.div key={title} variants={item} className="h-full">
+              <SpotlightCard 
+                className="relative p-[1px] rounded-xl bg-gradient-to-br from-blue/20 via-yellow/20 to-green/20 card-hover group h-full hover-shine overflow-hidden border-0"
+                spotlightColor={spotlightColors[idx]}
+              >
+                <div className="rounded-xl bg-white p-6 h-full flex flex-col relative">
+                  {idx === 0 && <Decorative variant="yellow" />}
+                  {idx === 1 && <Decorative variant="blue" />}
+                  {idx === 2 && <Decorative variant="green" />}
+                  
+                  {/* Feature Image */}
+                  <div className="mb-4 w-full h-40 flex items-center justify-center">
+                    <img src={image} alt={title} className="w-32 h-32 object-contain opacity-90" />
+                  </div>
+                  
+                  <div className={`h-11 w-11 rounded-lg ${bg} flex items-center justify-center mb-4`}>
+                    <Icon className={`${color} transition-transform duration-150 group-hover:rotate-3`} />
+                  </div>
+                  <h3 className="text-lg font-semibold text-navy mb-1">{title}</h3>
+                  <p className="text-navy/75 flex-1">{desc}</p>
+                </div>
+              </SpotlightCard>
+            </motion.div>
+          )
+        })}
       </motion.div>
     </div>
   )
