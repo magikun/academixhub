@@ -39,7 +39,7 @@ export default function Home() {
       <section className="section py-8 md:py-12">
         <FadeInSection>
           <div className="container mx-auto">
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy via-navy to-blue p-6 md:p-8 lg:p-10">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy via-navy to-blue p-6 md:p-8 lg:p-10 min-h-[100px] md:min-h-0 flex items-center justify-center">
               <div className="text-center">
                 <TextLoop interval={2.5}>
                   {[

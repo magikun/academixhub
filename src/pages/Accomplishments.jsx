@@ -59,10 +59,10 @@ export default function Accomplishments() {
       {/* Stats Grid */}
       <section className="section">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-11">
             {achievements.map((item, idx) => (
               <FadeInSection key={idx}>
-                <div className={`card p-8 hover:scale-[1.02] transition-all border-2 border-${item.color}/20`}>
+                <div className={`card p-8 hover:scale-[1.03] transition-all border-2 border-${item.color}/20`}>
                   <div className={`w-16 h-16 mb-4 rounded-full bg-${item.color}/10 flex items-center justify-center`}>
                     <item.icon className={`text-${item.color}`} size={32} />
                   </div>

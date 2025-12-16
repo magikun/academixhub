@@ -3,6 +3,7 @@ import FadeInSection from '../components/FadeInSection'
 import { useLanguage } from '../contexts/LanguageContext'
 import { getTranslation } from '../translations'
 import { HighlightGroup, HighlighterItem, Particles } from '../components/ui/highlighter'
+import { LocationMap } from '../components/ui/expand-map'
 
 export default function Contacts() {
   const { language } = useLanguage()
@@ -70,32 +71,36 @@ export default function Contacts() {
       <section className="section">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-2 gap-8 items-stretch">
               <FadeInSection>
-                <div className="card p-8 hover:scale-105 transition-transform">
-                  <div className="w-16 h-16 mb-4 rounded-full bg-blue/10 flex items-center justify-center">
-                    <Mail className="text-blue" size={32} />
+                <div className="card p-8 flex flex-col hover:scale-105 transition-transform h-full">
+                  <h3 className="text-2xl font-bold text-navy mb-6">{t.contacts.emailTitle}</h3>
+                  <div className="flex justify-center items-center flex-1 min-h-[140px]">
+                    <div className="text-center">
+                      <div className="w-16 h-16 mb-4 rounded-full bg-blue/10 flex items-center justify-center mx-auto">
+                        <Mail className="text-blue" size={32} />
+                      </div>
+                      <a href="mailto:academixhubglobal@gmail.com" className="text-lg text-blue hover:underline">
+                        academixhubglobal@gmail.com
+                      </a>
+                    </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-navy mb-3">{t.contacts.emailTitle}</h3>
-                  <a href="mailto:academixhubglobal@gmail.com" className="text-lg text-blue hover:underline">
-                  academixhubglobal@gmail.com
-                  </a>
-                  <p className="text-navy/70 mt-2">
+                  <p className="text-navy/70 mt-6 text-center">
                     {t.contacts.emailDesc}
                   </p>
                 </div>
               </FadeInSection>
 
               <FadeInSection>
-                <div className="card p-8 hover:scale-105 transition-transform">
-                  <div className="w-16 h-16 mb-4 rounded-full bg-green/10 flex items-center justify-center">
-                    <MapPin className="text-green" size={32} />
+                <div className="card p-8 flex flex-col h-full">
+                  <h3 className="text-2xl font-bold text-navy mb-6">{t.contacts.locationTitle}</h3>
+                  <div className="flex justify-center flex-1">
+                    <LocationMap 
+                      location={t.contacts.location}
+                      coordinates="51.1694° N, 71.4491° E"
+                    />
                   </div>
-                  <h3 className="text-2xl font-bold text-navy mb-3">{t.contacts.locationTitle}</h3>
-                  <p className="text-lg text-navy/80">
-                    {t.contacts.location}
-                  </p>
-                  <p className="text-navy/70 mt-2">
+                  <p className="text-navy/70 mt-6 text-center">
                     {t.contacts.locationDesc}
                   </p>
                 </div>

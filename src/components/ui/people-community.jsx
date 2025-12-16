@@ -2,6 +2,7 @@ import { useState, useRef, useMemo } from "react"
 import { ArrowRight, TrendingUp } from "lucide-react"
 import { useLanguage } from "../../contexts/LanguageContext"
 import { getTranslation } from "../../translations"
+import humanImage from "../../images/human.png"
 
 const monthData = [
   { month: "Jun", value: 50 },
@@ -80,14 +81,6 @@ export function PeopleInCommunity() {
       }
     })
     setHoveredIndex(closestIndex)
-    
-    // Calculate tooltip position
-    const pointX = (getX(closestIndex) / chartWidth) * rect.width
-    const pointY = (getY(monthData[closestIndex].value) / chartHeight) * rect.height
-    setTooltipPosition({
-      x: pointX,
-      y: pointY - 30 // Position above the point
-    })
   }
 
   const handleMouseLeave = () => {
@@ -105,26 +98,19 @@ export function PeopleInCommunity() {
     [],
   )
 
-  // Illustrative cards component
-  const PeopleCards = () => (
-    <div className="relative h-[110px] w-[130px]">
-      <div className="absolute top-0 right-0 w-16 h-20 rounded-lg bg-white/80 shadow-sm border border-navy/10 transform rotate-3">
-        <div className="w-8 h-8 rounded-full bg-blue/20 m-2 flex items-center justify-center">
-          <div className="w-4 h-4 rounded-full bg-blue/40"></div>
-        </div>
+  // Illustrative persons component with human PNG image
+  const PeopleCards = () => {
+    // 2x bigger than previous: 144px × 192px
+    return (
+      <div className="relative h-[192px] w-[144px] flex items-center justify-center">
+        <img 
+          src={humanImage} 
+          alt="People in community" 
+          className="w-[144px] h-[192px] object-contain"
+        />
       </div>
-      <div className="absolute top-2 right-2 w-16 h-20 rounded-lg bg-white/80 shadow-sm border border-navy/10 transform -rotate-2">
-        <div className="w-8 h-8 rounded-full bg-green/20 m-2 flex items-center justify-center">
-          <div className="w-4 h-4 rounded-full bg-green/40"></div>
-        </div>
-      </div>
-      <div className="absolute top-4 right-4 w-16 h-20 rounded-lg bg-white/80 shadow-sm border border-navy/10 transform rotate-1">
-        <div className="w-8 h-8 rounded-full bg-yellow/20 m-2 flex items-center justify-center">
-          <div className="w-4 h-4 rounded-full bg-yellow/40"></div>
-        </div>
-      </div>
-    </div>
-  )
+    )
+  }
 
   return (
     <div className="relative overflow-visible rounded-[28px] bg-white p-7 pb-5 shadow-[0_2px_8px_rgba(0,0,0,0.08),0_0_0_1px_rgba(0,0,0,0.04)] h-full flex flex-col">
@@ -145,7 +131,7 @@ export function PeopleInCommunity() {
           </div>
         </div>
 
-        <div className="relative -mr-1 -mt-1">
+        <div className="relative -mr-1 -mt-8">
           <PeopleCards />
         </div>
       </div>

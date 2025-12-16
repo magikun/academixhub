@@ -62,14 +62,18 @@ export default function Path() {
                   <div className={`text-6xl md:text-7xl font-extrabold text-${step.color}/20 min-w-[100px]`}>
                     {step.number}
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-2xl md:text-3xl font-bold text-navy mb-3 flex items-center gap-3">
-                      {step.title}
+                  <div className="flex-1 flex items-start justify-between gap-4">
+                    <div className="flex-1">
+                      <h3 className="text-2xl md:text-3xl font-bold text-navy mb-3">
+                        {step.title}
+                      </h3>
+                      <p className="text-lg text-navy/70 leading-relaxed">
+                        {step.description}
+                      </p>
+                    </div>
+                    <div className="flex-shrink-0 pt-1">
                       <CheckCircle2 className={`text-${step.color}`} size={28} />
-                    </h3>
-                    <p className="text-lg text-navy/70 leading-relaxed">
-                      {step.description}
-                    </p>
+                    </div>
                   </div>
                 </div>
               </FadeInSection>
