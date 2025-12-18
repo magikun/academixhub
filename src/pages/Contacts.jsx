@@ -71,36 +71,36 @@ export default function Contacts() {
       <section className="section">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-8 items-stretch">
+            <div className="grid md:grid-cols-2 gap-4 md:gap-8 items-stretch">
               <FadeInSection>
-                <div className="card p-8 flex flex-col hover:scale-105 transition-transform h-full">
-                  <h3 className="text-2xl font-bold text-navy mb-6">{t.contacts.emailTitle}</h3>
-                  <div className="flex justify-center items-center flex-1 min-h-[140px]">
+                <div className="card p-4 md:p-8 flex flex-col hover:scale-105 transition-transform h-full">
+                  <h3 className="text-xl md:text-2xl font-bold text-navy mb-4 md:mb-6">{t.contacts.emailTitle}</h3>
+                  <div className="flex justify-center items-center flex-1 min-h-[100px] md:min-h-[140px]">
                     <div className="text-center">
-                      <div className="w-16 h-16 mb-4 rounded-full bg-blue/10 flex items-center justify-center mx-auto">
-                        <Mail className="text-blue" size={32} />
+                      <div className="w-12 h-12 md:w-16 md:h-16 mb-3 md:mb-4 rounded-full bg-blue/10 flex items-center justify-center mx-auto">
+                        <Mail className="text-blue w-6 h-6 md:w-8 md:h-8" />
                       </div>
-                      <a href="mailto:academixhubglobal@gmail.com" className="text-lg text-blue hover:underline">
+                      <a href="mailto:academixhubglobal@gmail.com" className="text-sm md:text-lg text-blue hover:underline break-all">
                         academixhubglobal@gmail.com
                       </a>
                     </div>
                   </div>
-                  <p className="text-navy/70 mt-6 text-center">
+                  <p className="text-navy/70 mt-4 md:mt-6 text-center text-sm md:text-base">
                     {t.contacts.emailDesc}
                   </p>
                 </div>
               </FadeInSection>
 
               <FadeInSection>
-                <div className="card p-8 flex flex-col h-full">
-                  <h3 className="text-2xl font-bold text-navy mb-6">{t.contacts.locationTitle}</h3>
+                <div className="card p-4 md:p-8 flex flex-col h-full">
+                  <h3 className="text-xl md:text-2xl font-bold text-navy mb-4 md:mb-6">{t.contacts.locationTitle}</h3>
                   <div className="flex justify-center flex-1">
                     <LocationMap 
                       location={t.contacts.location}
                       coordinates="51.1694° N, 71.4491° E"
                     />
                   </div>
-                  <p className="text-navy/70 mt-6 text-center">
+                  <p className="text-navy/70 mt-4 md:mt-6 text-center text-sm md:text-base">
                     {t.contacts.locationDesc}
                   </p>
                 </div>

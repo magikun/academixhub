@@ -1,4 +1,4 @@
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from "framer-motion"
 
 export function LocationMap({
@@ -8,7 +8,17 @@ export function LocationMap({
 }) {
   const [isHovered, setIsHovered] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const containerRef = useRef(null)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
@@ -36,37 +46,98 @@ export function LocationMap({
 
   const handleClick = () => {
     setIsExpanded(!isExpanded)
+    // Prevent body scroll when expanded on mobile
+    if (isMobile) {
+      document.body.style.overflow = !isExpanded ? 'hidden' : 'auto'
+    }
+  }
+
+  // Close on escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && isExpanded) {
+        setIsExpanded(false)
+        if (isMobile) {
+          document.body.style.overflow = 'auto'
+        }
+      }
+    }
+    window.addEventListener('keydown', handleEscape)
+    return () => window.removeEventListener('keydown', handleEscape)
+  }, [isExpanded, isMobile])
+
+  // Calculate dimensions based on mobile/desktop
+  const getDimensions = () => {
+    if (isMobile) {
+      if (isExpanded) {
+        // On mobile when expanded, use calc to get full width minus padding
+        return {
+          width: 'calc(100vw - 2rem)', // Full viewport width minus 1rem padding on each side
+          height: 300,
+        }
+      } else {
+        // Smaller collapsed size on mobile
+        return {
+          width: 180,
+          height: 120,
+        }
+      }
+    }
+    // Desktop dimensions
+    return {
+      width: isExpanded ? 360 : 240,
+      height: isExpanded ? 280 : 140,
+    }
   }
 
   return (
-    <motion.div
-      ref={containerRef}
-      className={`relative cursor-pointer select-none ${className || ''}`}
-      style={{
-        perspective: 1000,
-      }}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
-      onClick={handleClick}
-    >
+    <>
+      {/* Backdrop overlay for mobile */}
+      <AnimatePresence>
+        {isMobile && isExpanded && (
+          <motion.div
+            className="fixed inset-0 bg-black/50 z-40 md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => {
+              setIsExpanded(false)
+              document.body.style.overflow = 'auto'
+            }}
+          />
+        )}
+      </AnimatePresence>
+
       <motion.div
-        className="relative overflow-hidden rounded-2xl bg-white border border-navy/10"
+        ref={containerRef}
+        className={`relative cursor-pointer select-none ${className || ''} ${isMobile && isExpanded ? 'fixed left-4 right-4 top-1/2 -translate-y-1/2 z-50 md:relative md:left-auto md:right-auto md:top-auto md:translate-y-0' : ''}`}
         style={{
-          rotateX: springRotateX,
-          rotateY: springRotateY,
-          transformStyle: "preserve-3d",
+          perspective: 1000,
         }}
-        animate={{
-          width: isExpanded ? 360 : 240,
-          height: isExpanded ? 280 : 140,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 400,
-          damping: 35,
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={handleMouseLeave}
+        onClick={(e) => {
+          e.stopPropagation() // Prevent backdrop click from triggering
+          if (!isMobile || !isExpanded) {
+            handleClick()
+          }
         }}
       >
+        <motion.div
+          className="relative overflow-hidden rounded-2xl bg-white border border-navy/10"
+          style={{
+            rotateX: isMobile ? 0 : springRotateX,
+            rotateY: isMobile ? 0 : springRotateY,
+            transformStyle: "preserve-3d",
+          }}
+          animate={getDimensions()}
+          transition={{
+            type: "spring",
+            stiffness: 400,
+            damping: 35,
+          }}
+        >
         {/* Subtle gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-navy/5 via-transparent to-navy/10" />
 
@@ -241,6 +312,33 @@ export function LocationMap({
 
         {/* Content */}
         <div className="relative z-10 h-full flex flex-col justify-between p-5">
+          {/* Close button for mobile */}
+          {isMobile && isExpanded && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                setIsExpanded(false)
+                document.body.style.overflow = 'auto'
+              }}
+              className="absolute top-2 right-2 z-20 w-8 h-8 rounded-full bg-white/90 hover:bg-white shadow-lg flex items-center justify-center text-navy transition-colors"
+              aria-label="Close"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          )}
+          
           {/* Top section */}
           <div className="flex items-start justify-between">
             <div className="relative">
@@ -336,7 +434,7 @@ export function LocationMap({
         style={{ x: "-50%" }}
         initial={{ opacity: 0 }}
         animate={{
-          opacity: isHovered && !isExpanded ? 1 : 0,
+          opacity: isHovered && !isExpanded && !isMobile ? 1 : 0,
           y: isHovered ? 0 : 4,
         }}
         transition={{ duration: 0.2 }}
@@ -344,6 +442,7 @@ export function LocationMap({
         Click to expand
       </motion.p>
     </motion.div>
+    </>
   )
 }
 
