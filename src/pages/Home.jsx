@@ -12,8 +12,6 @@ import TrustedBy from '../components/TrustedBy'
 import { TextLoop } from '../components/ui/text-loop'
 import { useLanguage } from '../contexts/LanguageContext'
 import { getTranslation } from '../translations'
-import businessman from '../images/businessman.png'
-import feedback from '../images/feedback.png'
 import fivestarsphone from '../images/fivestarsphone.png'
 
 export default function Home() {
@@ -96,16 +94,7 @@ export default function Home() {
       </section>
 
       <section className="section relative overflow-visible">
-        {/* Decorative Images - Outside testimonials content */}
-        <div className="absolute top-20 left-2 md:left-8 lg:left-16 w-20 h-20 md:w-28 md:h-28 lg:w-40 lg:h-40 float-slow pointer-events-none">
-          <img src={businessman} alt="" className="w-full h-full object-contain" />
-        </div>
-        <div className="absolute top-20 right-4 md:right-8 lg:right-16 w-14 h-14 md:w-24 md:h-24 lg:w-36 lg:h-36 float-slow pointer-events-none" style={{ animationDelay: '1s' }}>
-          <img src={feedback} alt="" className="w-full h-full object-contain" />
-        </div>
-       
-        
-        <div className="container mx-auto relative z-10">
+        <div className="container mx-auto relative z-10 overflow-visible">
           <Testimonials />
         </div>
       </section>

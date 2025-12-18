@@ -70,9 +70,9 @@ export function LocationMap({
   const getDimensions = () => {
     if (isMobile) {
       if (isExpanded) {
-        // On mobile when expanded, use calc to get full width minus padding
+        // On mobile when expanded, use auto width (constrained by parent's left-4 right-4)
         return {
-          width: 'calc(100vw - 2rem)', // Full viewport width minus 1rem padding on each side
+          width: 'auto', // Will be automatically sized by left-4 right-4 constraints
           height: 300,
         }
       } else {
@@ -110,9 +110,10 @@ export function LocationMap({
 
       <motion.div
         ref={containerRef}
-        className={`relative cursor-pointer select-none ${className || ''} ${isMobile && isExpanded ? 'fixed left-4 right-4 top-1/2 -translate-y-1/2 z-50 md:relative md:left-auto md:right-auto md:top-auto md:translate-y-0' : ''}`}
+        className={`relative cursor-pointer select-none ${className || ''} ${isMobile && isExpanded ? 'fixed inset-x-1 top-1/2 -translate-y-1/2 z-50 md:relative md:inset-x-auto md:top-auto md:translate-y-0' : ''}`}
         style={{
           perspective: 1000,
+          ...(isMobile && isExpanded ? { maxWidth: 'calc(100vw - 0.5rem)' } : {}),
         }}
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsHovered(true)}
